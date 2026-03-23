@@ -1,122 +1,124 @@
 # Sprint-3
 
-## Question -> Data -> Insight Lifecycle in Data Science
+## Part A: Repository Understanding README
 
-Data science starts with a decision problem, not a dataset. The Question -> Data -> Insight lifecycle helps keep work focused on outcomes that matter.
+This document reflects my understanding of a sample data science project repository before adding new work.
 
-### 1. Question: Define the decision before touching data
+## 1. Project Intent and High-Level Flow
 
-A clear question identifies:
-- Who needs the answer
-- What decision they are trying to make
-- What success looks like
-- What time frame and constraints matter
+### What problem the project is trying to address
 
-This is critical because data work is expensive in time and attention. If the question is vague, every later step becomes guesswork: we collect the wrong data, run irrelevant analysis, and produce results nobody can act on.
+The project appears to answer a practical decision question using historical data, for example: what patterns in the available data help explain or predict an important outcome (such as customer churn, demand, performance, or risk). The core intent is not just to generate charts or model scores, but to support a decision with defensible evidence.
 
-In practice, a strong question is specific and decision-oriented. For example, instead of asking "What does customer behavior look like?" a better question is "Which customer behaviors in the first 14 days best predict 90-day retention, so we can prioritize onboarding interventions?"
+### High-level workflow followed in the repository
 
-### 2. Data: Use evidence that matches the question
+The workflow follows a standard data science progression:
 
-Data is evidence for (or against) possible explanations. But before analysis, we need to understand:
-- What each field actually means in business terms
-- How and when data was collected
-- What is missing, noisy, delayed, or biased
-- Whether the granularity fits the question (user-level, session-level, daily, etc.)
+1. Define the objective and evaluation target.
+2. Ingest and understand raw data.
+3. Clean/transform data into analysis-ready form.
+4. Explore patterns and test early hypotheses.
+5. Build analysis artifacts (summary outputs and possibly models).
+6. Communicate findings in a format others can reuse.
 
-Understanding data before analyzing it prevents false confidence. A clean chart can still be wrong if the underlying data generation process is misunderstood.
+This sequence is iterative. Exploration often reveals data quality issues, which sends work back to cleaning or even to refining the original question.
 
-So this step is not "load and model." It is "validate whether this evidence is fit for the question." If not, we revise the question, gather additional data, or narrow scope.
+### How structure reflects lifecycle stages
 
-### 3. Insight: Produce meaning that changes decisions
+The repository structure typically mirrors this lifecycle by separating:
+- Source data and processed data
+- Exploratory notebooks and reusable scripts
+- Generated outputs (figures, reports, model artifacts)
 
-Insights are not raw numbers. An insight connects evidence to action.
+That separation helps preserve traceability: a new contributor can see what is input, what is transformation logic, and what is final evidence.
 
-Example structure:
-- Observation: Users who complete onboarding checklist have 2.1x higher 90-day retention.
-- Interpretation: Early product activation appears to drive long-term stickiness.
-- Action: Prioritize checklist completion experiments for new users in week 1.
+## 2. Repository Structure and File Roles
 
-Insights emerge through exploration, iteration, and context. Tools and models help, but they do not replace reasoning. The goal is not to "find patterns" randomly; it is to discover patterns that are relevant to the original decision.
+### Purpose of key folders/files
 
-### How the steps connect
+In a sample data science repository, the major areas usually represent this work:
 
-The lifecycle is a chain:
-- The question determines what data is relevant.
-- The data quality and meaning determine which conclusions are credible.
-- Credible conclusions become insights only when tied to an actual decision.
+- `data/`: raw and intermediate datasets; often includes subfolders for immutable source data and cleaned versions.
+- `notebooks/`: exploratory analysis, profiling, feature exploration, and early hypothesis checks.
+- `scripts/` or `src/`: reusable code for preprocessing, feature engineering, training, scoring, or report generation.
+- `outputs/`, `reports/`, or `figures/`: exported tables, plots, and final deliverables.
+- `README.md`: project objective, setup, and usage guidance for collaborators.
 
-If one step is weak, the entire chain weakens. Strong data science is disciplined alignment across all three.
+### Exploratory work vs finalized analysis
 
-## Applying the Lifecycle to a Project Context
+Exploratory work is usually notebook-heavy and flexible: trying alternatives, quickly visualizing patterns, and iterating on assumptions. Finalized analysis is more stable and reproducible: scripted pipelines, explicit parameters, and outputs that others can regenerate.
 
-### Project scenario
+A useful rule is:
+- notebooks for thinking,
+- scripts for repeatability,
+- outputs for communication.
 
-I will use a realistic e-commerce context:
-An online store has high cart abandonment and wants to improve completed purchases.
+### Where a new contributor should be cautious
 
-### Question
+Care is most important in:
 
-"Which factors during a shopper session are most associated with cart abandonment, and which of those factors are realistically changeable in the checkout experience?"
+- Raw data locations: avoid overwriting source files.
+- Shared preprocessing logic: small edits can change downstream results.
+- Existing output artifacts used in reports: avoid replacing without documenting differences.
+- Environment/config files: dependency changes can break reproducibility.
 
-Why this question is useful:
-- It targets a specific business outcome (conversion)
-- It narrows scope to actionable factors, not just correlations
-- It frames analysis around intervention, not description
+When unsure, add new files (for example, a new notebook or script) instead of editing core pipeline files directly.
 
-### Data needed
+## 3. Assumptions, Gaps, and Open Questions
 
-Types of data and what they represent:
-- Session behavior logs: page views, add-to-cart events, checkout steps, exit points
-- Transaction records: completed purchases, order value, payment method
-- UX/performance data: page load time, error rates, failed payment attempts
-- Device and channel data: mobile/desktop, traffic source, campaign tags
+### Assumptions visible in the repository
 
-Possible sources:
-- Web analytics platform
-- Application event tracking
-- Order management/payment system
-- Experiment logs if A/B tests already exist
+Common assumptions this repository appears to rely on:
 
-What matters before analysis:
-- Event timestamps are consistent across systems
-- Session IDs can be joined reliably
-- "Abandoned cart" is explicitly defined (for example, no purchase within 24 hours)
+- Data is representative of the real-world process.
+- Labels/targets are accurate and consistently defined.
+- Missing values and outliers can be handled without changing conclusions.
+- Time-related leakage is controlled if prediction tasks are involved.
 
-### Useful insight for decision-making
+### Missing documentation or unclear steps
 
-An example of a useful insight:
-"Mobile users with checkout load times above 4 seconds abandon at significantly higher rates, especially at the payment step. Reducing payment-page load time is likely a higher-impact intervention than adding new discount banners."
+Potential clarity gaps for new contributors include:
 
-Why this is useful:
-- It identifies a concrete bottleneck
-- It points to a specific, testable action
-- It supports prioritization of engineering and product resources
+- No explicit data dictionary for key columns.
+- Unclear run order between notebooks and scripts.
+- Limited explanation of why specific preprocessing choices were made.
+- No clear statement of what should be treated as authoritative final output.
 
-## Video Walkthrough Guide (Approx. 2 Minutes)
+### One improvement to make extension easier
 
-Use this structure while recording:
+Add a short `CONTRIBUTING` section in the README that includes:
+
+1. Recommended start point for new analysis.
+2. Which folders are safe for experimentation.
+3. Which files should be treated as stable production logic.
+4. A minimal reproducible run path from raw data to final output.
+
+This single addition would reduce onboarding time and lower the risk of accidental breakage.
+
+## Part B: Video Walkthrough Guide (~2 Minutes)
+
+Use this flow while recording your screen:
 
 1. Opening (15-20 seconds)
-- State that your README explains how data science should start with a clear question, then move to data as evidence, then to actionable insight.
+- State that you reviewed the repository to understand intent before adding code.
 
-2. Lifecycle explanation (45-60 seconds)
-- Explain that the question defines the decision.
-- Explain that data must be understood in context before analysis.
-- Explain that insight means evidence plus interpretation plus action.
+2. Structure walkthrough (35-45 seconds)
+- Show main folders and explain each role (data, notebooks, scripts/src, outputs).
+- Explain the difference between exploratory and finalized work.
 
-3. Project scenario application (30-40 seconds)
-- Walk through your e-commerce cart-abandonment example.
-- State the question, needed data, and one useful insight that could drive a business decision.
+3. README reasoning (35-45 seconds)
+- Explain how your README helps a new contributor understand workflow and caution areas.
+- Mention where documentation is strong and where it is incomplete.
 
 4. Mandatory scenario response (35-45 seconds)
-- Prompt: "We have many columns, no problem statement, let us model first."
-- Your response:
-	- First, pause and define the decision question with stakeholders.
-	- Then audit the dataset for relevance and quality against that question.
-	- Risks of skipping steps: spurious patterns, wasted effort, misleading conclusions, and no actionable outcome.
-	- Realignment: translate business need into a clear question, map needed evidence, then explore toward decision-oriented insight.
+- Scenario: you must add a new analysis without breaking existing work.
+- Explain your decision process:
+	1. Start with README and existing outputs to understand project intent.
+	2. Trace the current pipeline from data inputs to final artifacts.
+	3. Create a separate exploratory notebook/script for new work.
+	4. Reuse existing preprocessing where possible; avoid editing stable core logic first.
+	5. Validate that existing outputs still reproduce before proposing integration.
 
-## Scenario-Based Reasoning Script (Verbal)
+## Scenario-Based Verbal Response (Ready to Speak)
 
-If I were given many columns but no clear problem statement, I would not start by modeling immediately. I would first ask what decision the team is trying to make, because without that, we cannot judge whether any pattern is useful. Next, I would profile the data to check what each column represents, whether quality is acceptable, and whether the data actually relates to that decision. If we skip those steps, we risk producing attractive but meaningless outputs, overfitting noise, and recommending actions that do not solve a real problem. I would realign the project by defining one clear question, selecting evidence that directly supports it, and only then doing exploration to produce insights that can drive a concrete decision.
+If I need to extend this project and I am unsure where to start, I would begin with the documentation and existing outputs to understand what question the current project is solving and what results are considered final. Then I would map the workflow from data intake to processed data to analysis artifacts so I know which files are core and which are exploratory. I would do new work in an isolated notebook or script first, rather than changing shared pipeline files immediately. That lets me test ideas without risking existing results. Once the new analysis is stable, I would integrate it carefully, confirm previous outputs still reproduce, and document exactly what changed and why.
