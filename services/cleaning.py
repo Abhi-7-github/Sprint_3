@@ -11,6 +11,7 @@ _CATEGORY_KEYWORDS = {
     "road": ("road", "pothole", "street", "footpath"),
     "electricity": ("electricity", "power", "light", "streetlight", "outage"),
     "cleanliness": ("cleanliness", "sanitation", "hygiene", "filth"),
+    "other": ()
 }
 
 
