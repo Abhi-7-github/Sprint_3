@@ -59,3 +59,10 @@ export async function getInsights(apiBaseUrl, adminPassword) {
   })
   return readJsonOrThrow(resp)
 }
+
+export async function getMlInsights(apiBaseUrl, adminPassword) {
+  const resp = await fetch(`${apiBaseUrl}/ml-insights`, {
+    headers: { ...adminHeaders(adminPassword) },
+  })
+  return readJsonOrThrow(resp)
+}

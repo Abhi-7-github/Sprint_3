@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import database
 from routes.complaints import insights_router, router as complaints_router
+from routes.ml import router as ml_router
 
 
 # Load environment variables from .env if present
@@ -68,6 +69,7 @@ app.add_middleware(
 
 app.include_router(complaints_router)
 app.include_router(insights_router)
+app.include_router(ml_router)
 
 
 @app.get("/health")

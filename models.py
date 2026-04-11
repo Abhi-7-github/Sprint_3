@@ -125,3 +125,28 @@ class InsightsResponse(BaseModel):
     countsByCategory: Dict[str, int]
     countsByWard: Dict[str, int]
     topRecurringIssues: List[TopRecurringIssue]
+
+
+class MLCluster(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    issue: str
+    count: int
+    wards: List[str]
+
+
+class MLPredictedCategory(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    description: str
+    predicted: str
+    actual: Optional[str] = None
+    confidence: Optional[float] = None
+
+
+class MLInsightsResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    clusters: List[MLCluster]
+    predictedCategories: List[MLPredictedCategory]
+    message: Optional[str] = None
