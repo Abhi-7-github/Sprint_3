@@ -33,6 +33,24 @@ Admins can:
 - Update status: `PUT /complaints/{id}` with `{ "status": "in-progress" }`
 - View insights: `GET /insights` (aggregation-based analytics)
 
+### 5) ML integration (protected)
+The admin dashboard also supports an optional ML-powered insights endpoint:
+
+- Endpoint: `GET /ml-insights`
+- Auth: requires `admin-password: <your ADMIN_PASSWORD>`
+- What it does (computed from existing complaints in MongoDB):
+	- **Recurring issue clustering**: TF-IDF + KMeans groups similar complaint descriptions into clusters.
+	- **Category prediction**: TF-IDF + Logistic Regression predicts complaint categories from text.
+
+Response shape (`MLInsightsResponse`):
+- `clusters`: list of `{ issue, count, wards }`
+- `predictedCategories`: list of `{ description, predicted, actual?, confidence? }`
+- `message`: optional info (e.g., dataset too small for clustering)
+
+Notes:
+- The ML endpoint builds a lightweight in-memory model on demand from the latest complaints (with a short TTL cache to keep requests fast).
+- For ML output, `garbage` complaints may be normalized and shown as `waste`.
+
 ## Tech Stack
 
 - Backend: FastAPI + PyMongo + Pydantic
@@ -76,5 +94,5 @@ VITE_API_BASE_URL=http://127.0.0.1:8000
 ## UI Pages
 
 - **Raise Complaint**: submit complaint + check status by ID
-- **Dashboard**: admin insights (requires admin password)
+- **Dashboard**: admin insights + ML insights (requires admin password)
 - **Complaints**: admin list + status update (requires admin password)
